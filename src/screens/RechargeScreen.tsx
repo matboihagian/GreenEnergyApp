@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, Alert, StyleSheet } from 'react-native';
+import { View, Text, ImageBackground, TouchableOpacity, FlatList, Alert, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import WallpaperStyle from '../styles/WallpaperStyle';
+import ButtonStyle from '../styles/ButtonStyle';
 
 type RechargeStation = {
   id: number;
@@ -16,7 +18,6 @@ type RechargeScreenProps = NativeStackScreenProps<RootStackParamList, 'Recharge'
 const RechargeScreen: React.FC<RechargeScreenProps> = ({ navigation }) => {
   const [stations, setStations] = useState<RechargeStation[]>([]);
 
-  // Função para carregar os pontos de recarga do backend
   const loadStations = async () => {
     try {
       const response = await axios.get('http://localhost:3000/api/charging-stations'); 
@@ -27,7 +28,6 @@ const RechargeScreen: React.FC<RechargeScreenProps> = ({ navigation }) => {
     }
   };
 
-  // Função para excluir um ponto de recarga
   const deleteStation = async (id: number) => {
     try {
       await axios.delete(`http://localhost:3000/api/charging-stations/${id}`);
@@ -43,38 +43,56 @@ const RechargeScreen: React.FC<RechargeScreenProps> = ({ navigation }) => {
     loadStations();
   }, []);
 
-  // Renderização de cada item da lista de pontos de recarga
   const renderStationItem = ({ item }: { item: RechargeStation }) => (
-    <View style={styles.stationItem}>
-      <Text>{item.location} - Capacidade: {item.capacity} - Status: {item.status}</Text>
-      <View style={styles.actions}>
-        <Button
-          title="Editar"
-          onPress={() => navigation.navigate('EditStation', { station: item })} // Navega para a tela de edição
-        />
-        <Button
-          title="Excluir"
-          color="red"
-          onPress={() => deleteStation(item.id)}
-        />
+    <View style={styles.stationItemContainer}>
+      <View style={styles.stationItem}>
+        <Text style={styles.stationText}>{item.location} - Capacidade: {item.capacity} - Status: {item.status}</Text>
+        <View style={styles.actions}>
+          <TouchableOpacity
+            style={ButtonStyle.button}
+            onPress={() => navigation.navigate('EditStation', { station: item })}
+            activeOpacity={0.7}
+          >
+            <Text style={ButtonStyle.buttonText}>Editar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[ButtonStyle.button, { backgroundColor: 'rgba(255, 0, 0, 0.7)' }]}
+            onPress={() => deleteStation(item.id)}
+            activeOpacity={0.7}
+          >
+            <Text style={ButtonStyle.buttonText}>Excluir</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Pontos de Recarga</Text>
-      
-      <FlatList
-        data={stations}
-        renderItem={renderStationItem}
-        keyExtractor={(item) => item.id.toString()}
-      />
+    <ImageBackground
+      source={require('../../assets/img/wallpaper.png')}
+      style={WallpaperStyle.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <Text style={styles.title}>Pontos de Recarga</Text>
+        
+        <FlatList
+          data={stations}
+          renderItem={renderStationItem}
+          keyExtractor={(item) => item.id.toString()}
+        />
 
-      <View style={styles.buttons}>
-        <Button title="Adicionar Novo Ponto de Recarga" onPress={() => navigation.navigate('CreateStation')} />
+        <View style={styles.buttons}>
+          <TouchableOpacity
+            style={ButtonStyle.button}
+            onPress={() => navigation.navigate('CreateStation')}
+            activeOpacity={0.7}
+          >
+            <Text style={ButtonStyle.buttonText}>Adicionar Novo Ponto de Recarga</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -89,11 +107,19 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+    textAlign: 'center',
+  },
+  stationItemContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fundo branco translúcido
+    padding: 8,
+    marginBottom: 8,
+    borderRadius: 8,
   },
   stationItem: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    flex: 1,
+  },
+  stationText: {
+    fontSize: 16,
   },
   actions: {
     flexDirection: 'row',
@@ -102,5 +128,6 @@ const styles = StyleSheet.create({
   },
   buttons: {
     marginTop: 16,
+    alignItems: 'center',
   },
 });

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, ImageBackground, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import WallpaperStyle from '../styles/WallpaperStyle';
+import ButtonStyle from '../styles/ButtonStyle';
 
 type EditStationScreenProps = NativeStackScreenProps<RootStackParamList, 'EditStation'>;
 
@@ -46,39 +48,55 @@ const EditStationScreen: React.FC<EditStationScreenProps> = ({ route, navigation
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Editar Ponto de Recarga</Text>
+    <ImageBackground
+      source={require('../../assets/img/wallpaper.png')}
+      style={WallpaperStyle.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <Text style={styles.title}>Editar Ponto de Recarga</Text>
 
-      <Text>Localização</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Ex: Centro da Cidade"
-        value={location}
-        onChangeText={setLocation}
-      />
+        <Text>Localização</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ex: Centro da Cidade"
+          value={location}
+          onChangeText={setLocation}
+          placeholderTextColor="rgba(0, 0, 0, 0.5)"
+        />
 
-      <Text>Capacidade</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Ex: 4"
-        keyboardType="numeric"
-        value={capacity}
-        onChangeText={setCapacity}
-      />
+        <Text>Capacidade</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ex: 4"
+          keyboardType="numeric"
+          value={capacity}
+          onChangeText={setCapacity}
+          placeholderTextColor="rgba(0, 0, 0, 0.5)"
+        />
 
-      <Text>Status</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Ex: Ativo"
-        value={status}
-        onChangeText={setStatus}
-      />
+        <Text>Status</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ex: Ativo"
+          value={status}
+          onChangeText={setStatus}
+          placeholderTextColor="rgba(0, 0, 0, 0.5)"
+        />
 
-      <Button title="Salvar Alterações" onPress={saveStation} />
-      <View style={{ marginTop: 10 }}>
-        <Button title="Excluir Ponto de Recarga" color="red" onPress={deleteStation} />
+        <TouchableOpacity style={ButtonStyle.button} onPress={saveStation} activeOpacity={0.7}>
+          <Text style={ButtonStyle.buttonText}>Salvar Alterações</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[ButtonStyle.button, { backgroundColor: 'rgba(255, 0, 0, 0.7)', marginTop: 16 }]}
+          onPress={deleteStation}
+          activeOpacity={0.7}
+        >
+          <Text style={ButtonStyle.buttonText}>Excluir Ponto de Recarga</Text>
+        </TouchableOpacity>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -88,11 +106,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fundo translúcido para contraste
+    margin: 16,
+    borderRadius: 8,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+    textAlign: 'center',
   },
   input: {
     height: 40,
@@ -100,5 +122,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Fundo translúcido nos campos de entrada
+    borderRadius: 8,
   },
 });
