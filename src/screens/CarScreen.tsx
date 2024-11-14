@@ -70,6 +70,13 @@ const CarScreen: React.FC<CarScreenProps> = ({ navigation }) => {
           >
             <Text style={ButtonStyle.buttonText}>Excluir</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[ButtonStyle.button, { backgroundColor: 'rgba(0, 150, 255, 0.7)' }]}
+            onPress={() => navigation.navigate('ChargingScreen', { carId: item.id })}
+            activeOpacity={0.7}
+          >
+            <Text style={ButtonStyle.buttonText}>Carregar</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

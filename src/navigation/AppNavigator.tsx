@@ -6,10 +6,11 @@ import SignUpScreen from '../screens/SignUpScreen';
 import MainScreen from '../screens/MainScreen';
 import CarScreen from '../screens/CarScreen';
 import RechargeScreen from '../screens/RechargeScreen';
-import CreateCarScreen from '../screens/CreateCarScreen'; // Importando CreateCarScreen
-import EditCarScreen from '../screens/EditCarScreen';     // Importando EditCarScreen
-import CreateStation from '../screens/CreateStationScreen'; // Importando CreateStationScreen
-import EditStation from '../screens/EditStationScreen';     // Importando EditStationScreen
+import CreateCarScreen from '../screens/CreateCarScreen';
+import EditCarScreen from '../screens/EditCarScreen';
+import CreateStation from '../screens/CreateStationScreen';
+import EditStation from '../screens/EditStationScreen';
+import Charging from '../screens/ChargingScreen'; // Importando ChargingScreen
 
 // Definindo o RootStackParamList com os tipos de parâmetros para cada tela
 export type RootStackParamList = {
@@ -19,10 +20,11 @@ export type RootStackParamList = {
     Main: undefined;
     Car: undefined;
     Recharge: undefined;
-    CreateCar: undefined; // Rota para criação de carros
-    EditCar: { car: { id: number; make: string; model: string; year: number; ownerId: number,  battery_level: number;} }; // Parâmetros para editar carros
-    CreateStation: undefined; // Rota para criação de pontos de recarga
-    EditStation: { station: { id: number; location: string; capacity: number; status: string, potencia: string; } }; // Parâmetros para editar pontos de recarga
+    CreateCar: undefined;
+    EditCar: { car: { id: number; make: string; model: string; year: number; ownerId: number; battery_level: number } };
+    CreateStation: undefined;
+    EditStation: { station: { id: number; location: string; capacity: number; status: string; potencia: string } };
+    ChargingScreen: { carId: number }; // Parâmetro para identificar o carro a ser carregado
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -79,6 +81,11 @@ const AppNavigator = () => {
                 name="EditStation" 
                 component={EditStation} 
                 options={{ title: 'Editar Ponto de Recarga' }} 
+            />
+            <Stack.Screen 
+                name="ChargingScreen" 
+                component={Charging} 
+                options={{ title: 'Carregar Carro' }} 
             />
         </Stack.Navigator>
     );
