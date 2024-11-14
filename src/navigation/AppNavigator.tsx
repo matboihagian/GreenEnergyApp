@@ -20,9 +20,9 @@ export type RootStackParamList = {
     Car: undefined;
     Recharge: undefined;
     CreateCar: undefined; // Rota para criação de carros
-    EditCar: { car: { id: number; make: string; model: string; year: number; ownerId: number } }; // Parâmetros para editar carros
+    EditCar: { car: { id: number; make: string; model: string; year: number; ownerId: number,  battery_level: number;} }; // Parâmetros para editar carros
     CreateStation: undefined; // Rota para criação de pontos de recarga
-    EditStation: { station: { id: number; location: string; capacity: number; status: string } }; // Parâmetros para editar pontos de recarga
+    EditStation: { station: { id: number; location: string; capacity: number; status: string, potencia: string; } }; // Parâmetros para editar pontos de recarga
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

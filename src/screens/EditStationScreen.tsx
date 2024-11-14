@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import WallpaperStyle from '../styles/WallpaperStyle';
 import ButtonStyle from '../styles/ButtonStyle';
+import { Picker } from '@react-native-picker/picker';
 
 type EditStationScreenProps = NativeStackScreenProps<RootStackParamList, 'EditStation'>;
 
@@ -14,9 +15,10 @@ const EditStationScreen: React.FC<EditStationScreenProps> = ({ route, navigation
   const [location, setLocation] = useState(station.location);
   const [capacity, setCapacity] = useState(station.capacity.toString());
   const [status, setStatus] = useState(station.status);
+  const [potencia, setPotencia] = useState(station.potencia); // Estado para a potência
 
   const saveStation = async () => {
-    if (!location || !capacity || !status) {
+    if (!location || !capacity || !status || !potencia) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos.');
       return;
     }
@@ -26,6 +28,7 @@ const EditStationScreen: React.FC<EditStationScreenProps> = ({ route, navigation
         location,
         capacity: parseInt(capacity, 10),
         status,
+        potencia,
       });
 
       Alert.alert('Sucesso', 'Ponto de recarga atualizado com sucesso!');
@@ -84,6 +87,19 @@ const EditStationScreen: React.FC<EditStationScreenProps> = ({ route, navigation
           placeholderTextColor="rgba(0, 0, 0, 0.5)"
         />
 
+        <Text>Potência</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={potencia}
+            onValueChange={(itemValue) => setPotencia(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="1,4kW" value="1,4kW" />
+            <Picker.Item label="22kW" value="22kW" />
+            <Picker.Item label="50kW" value="50kW" />
+          </Picker>
+        </View>
+
         <TouchableOpacity style={ButtonStyle.button} onPress={saveStation} activeOpacity={0.7}>
           <Text style={ButtonStyle.buttonText}>Salvar Alterações</Text>
         </TouchableOpacity>
@@ -124,5 +140,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     backgroundColor: 'rgba(255, 255, 255, 0.5)', // Fundo translúcido nos campos de entrada
     borderRadius: 8,
+  },
+  pickerContainer: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginBottom: 12,
+  },
+  picker: {
+    height: 40,
+    color: 'black',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
 });

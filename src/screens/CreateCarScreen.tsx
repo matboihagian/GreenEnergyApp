@@ -13,10 +13,18 @@ const CreateCarScreen: React.FC<CreateCarScreenProps> = ({ navigation }) => {
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
   const [ownerId, setOwnerId] = useState('');
+  const [batteryLevel, setBatteryLevel] = useState(''); // Novo campo para o nível de bateria
 
   const createCar = async () => {
-    if (!make || !model || !year || !ownerId) {
+    if (!make || !model || !year || !ownerId || batteryLevel === '') {
       Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+      return;
+    }
+
+    // Validar nível de bateria entre 0 e 100
+    const batteryLevelNumber = parseInt(batteryLevel, 10);
+    if (isNaN(batteryLevelNumber) || batteryLevelNumber < 0 || batteryLevelNumber > 100) {
+      Alert.alert('Erro', 'O nível de bateria deve ser um valor entre 0 e 100.');
       return;
     }
 
@@ -26,6 +34,7 @@ const CreateCarScreen: React.FC<CreateCarScreenProps> = ({ navigation }) => {
         model,
         year: parseInt(year, 10),
         ownerId: parseInt(ownerId, 10),
+        battery_level: batteryLevelNumber, // Envia o nível de bateria
       });
 
       Alert.alert('Sucesso', 'Carro criado com sucesso!');
@@ -48,7 +57,7 @@ const CreateCarScreen: React.FC<CreateCarScreenProps> = ({ navigation }) => {
         <Text>Marca (Make)</Text>
         <TextInput
           style={styles.input}
-          placeholder="Ex: Toyota"
+          placeholder="Ex: Tesla"
           value={make}
           onChangeText={setMake}
           placeholderTextColor="rgba(0, 0, 0, 0.5)"
@@ -57,7 +66,7 @@ const CreateCarScreen: React.FC<CreateCarScreenProps> = ({ navigation }) => {
         <Text>Modelo (Model)</Text>
         <TextInput
           style={styles.input}
-          placeholder="Ex: Corolla"
+          placeholder="Ex: Model S"
           value={model}
           onChangeText={setModel}
           placeholderTextColor="rgba(0, 0, 0, 0.5)"
@@ -66,7 +75,7 @@ const CreateCarScreen: React.FC<CreateCarScreenProps> = ({ navigation }) => {
         <Text>Ano (Year)</Text>
         <TextInput
           style={styles.input}
-          placeholder="Ex: 2022"
+          placeholder="Ex: 2024"
           keyboardType="numeric"
           value={year}
           onChangeText={setYear}
@@ -80,6 +89,16 @@ const CreateCarScreen: React.FC<CreateCarScreenProps> = ({ navigation }) => {
           keyboardType="numeric"
           value={ownerId}
           onChangeText={setOwnerId}
+          placeholderTextColor="rgba(0, 0, 0, 0.5)"
+        />
+
+        <Text>Nível de Bateria (%)</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ex: 85"
+          keyboardType="numeric"
+          value={batteryLevel}
+          onChangeText={setBatteryLevel}
           placeholderTextColor="rgba(0, 0, 0, 0.5)"
         />
 

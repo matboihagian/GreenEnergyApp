@@ -15,10 +15,20 @@ const EditCarScreen: React.FC<EditCarScreenProps> = ({ route, navigation }) => {
   const [model, setModel] = useState(car.model);
   const [year, setYear] = useState(car.year.toString());
   const [ownerId, setOwnerId] = useState(car.ownerId.toString());
+  const [batteryLevel, setBatteryLevel] = useState(car.battery_level.toString()); // Novo estado para o nível de bateria
 
   const saveCar = async () => {
-    if (!make || !model || !year || !ownerId) {
+    console.log("Função saveCar foi chamada"); // Log para depuração
+
+    if (!make || !model || !year || !ownerId || batteryLevel === '') {
       Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+      return;
+    }
+
+    // Validar nível de bateria entre 0 e 100
+    const batteryLevelNumber = parseInt(batteryLevel, 10);
+    if (isNaN(batteryLevelNumber) || batteryLevelNumber < 0 || batteryLevelNumber > 100) {
+      Alert.alert('Erro', 'O nível de bateria deve ser um valor entre 0 e 100.');
       return;
     }
 
@@ -28,6 +38,7 @@ const EditCarScreen: React.FC<EditCarScreenProps> = ({ route, navigation }) => {
         model,
         year: parseInt(year, 10),
         ownerId: parseInt(ownerId, 10),
+        battery_level: batteryLevelNumber, // Atualiza o nível de bateria
       });
 
       Alert.alert('Sucesso', 'Carro atualizado com sucesso!');
@@ -93,6 +104,16 @@ const EditCarScreen: React.FC<EditCarScreenProps> = ({ route, navigation }) => {
           keyboardType="numeric"
           value={ownerId}
           onChangeText={setOwnerId}
+          placeholderTextColor="rgba(0, 0, 0, 0.5)"
+        />
+
+        <Text>Nível de Bateria (%)</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ex: 85"
+          keyboardType="numeric"
+          value={batteryLevel}
+          onChangeText={setBatteryLevel}
           placeholderTextColor="rgba(0, 0, 0, 0.5)"
         />
 

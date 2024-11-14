@@ -12,6 +12,7 @@ interface Car {
   model: string;
   year: number;
   ownerId: number;
+  battery_level: number; // Adicionando o nível de bateria
 }
 
 type CarScreenProps = NativeStackScreenProps<RootStackParamList, 'Car'>;
@@ -48,7 +49,12 @@ const CarScreen: React.FC<CarScreenProps> = ({ navigation }) => {
     <View style={styles.carItemContainer}>
       <Image source={require('../../assets/img/caricon.png')} style={styles.carIcon} />
       <View style={styles.carItem}>
-        <Text style={styles.carText}>{item.make} {item.model} - {item.year}</Text>
+        <Text style={styles.carText}>
+          {item.make} {item.model} - {item.year}
+        </Text>
+        <Text style={styles.batteryText}>
+          Bateria: {item.battery_level}% {/* Exibindo a porcentagem de bateria */}
+        </Text>
         <View style={styles.actions}>
           <TouchableOpacity
             style={ButtonStyle.button}
@@ -136,6 +142,10 @@ const styles = StyleSheet.create({
   },
   carText: {
     fontSize: 16,
+  },
+  batteryText: {
+    fontSize: 14,
+    color: 'gray',
   },
   actions: {
     flexDirection: 'row',

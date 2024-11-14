@@ -11,6 +11,7 @@ type RechargeStation = {
   location: string;
   capacity: number;
   status: string;
+  potencia: string; // Nova propriedade para a potência
 };
 
 type RechargeScreenProps = NativeStackScreenProps<RootStackParamList, 'Recharge'>;
@@ -46,7 +47,9 @@ const RechargeScreen: React.FC<RechargeScreenProps> = ({ navigation }) => {
   const renderStationItem = ({ item }: { item: RechargeStation }) => (
     <View style={styles.stationItemContainer}>
       <View style={styles.stationItem}>
-        <Text style={styles.stationText}>{item.location} - Capacidade: {item.capacity} - Status: {item.status}</Text>
+        <Text style={styles.stationText}>
+          {item.location} - Capacidade: {item.capacity} - Status: {item.status} - Potência: {item.potencia}
+        </Text>
         <View style={styles.actions}>
           <TouchableOpacity
             style={ButtonStyle.button}

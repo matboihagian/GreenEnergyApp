@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import WallpaperStyle from '../styles/WallpaperStyle';
 import ButtonStyle from '../styles/ButtonStyle';
+import { Picker } from '@react-native-picker/picker'; // Import do Picker
 
 type CreateStationScreenProps = NativeStackScreenProps<RootStackParamList, 'CreateStation'>;
 
@@ -12,9 +13,10 @@ const CreateStationScreen: React.FC<CreateStationScreenProps> = ({ navigation })
   const [location, setLocation] = useState('');
   const [capacity, setCapacity] = useState('');
   const [status, setStatus] = useState('');
+  const [potencia, setPotencia] = useState('1,4kW'); // Estado para a potência, valor inicial '1,4kW'
 
   const createStation = async () => {
-    if (!location || !capacity || !status) {
+    if (!location || !capacity || !status || !potencia) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos.');
       return;
     }
@@ -24,6 +26,7 @@ const CreateStationScreen: React.FC<CreateStationScreenProps> = ({ navigation })
         location,
         capacity: parseInt(capacity, 10),
         status,
+        potencia,
       });
 
       Alert.alert('Sucesso', 'Ponto de recarga criado com sucesso!');
@@ -71,6 +74,19 @@ const CreateStationScreen: React.FC<CreateStationScreenProps> = ({ navigation })
           placeholderTextColor="rgba(0, 0, 0, 0.5)"
         />
 
+        <Text>Potência</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={potencia}
+            onValueChange={(itemValue) => setPotencia(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="1,4kW" value="1,4kW" />
+            <Picker.Item label="22kW" value="22kW" />
+            <Picker.Item label="50kW" value="50kW" />
+          </Picker>
+        </View>
+
         <TouchableOpacity style={ButtonStyle.button} onPress={createStation} activeOpacity={0.7}>
           <Text style={ButtonStyle.buttonText}>Cadastrar Ponto de Recarga</Text>
         </TouchableOpacity>
@@ -103,5 +119,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     backgroundColor: 'rgba(255, 255, 255, 0.5)', // Fundo translúcido nos campos de entrada
     borderRadius: 8,
+  },
+  pickerContainer: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginBottom: 12,
+  },
+  picker: {
+    height: 40,
+    color: 'black',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
 });
