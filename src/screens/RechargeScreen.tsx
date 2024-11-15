@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ImageBackground, TouchableOpacity, FlatList, Alert, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+  StyleSheet,
+} from 'react-native';
 import axios from 'axios';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -11,7 +20,8 @@ type RechargeStation = {
   location: string;
   capacity: number;
   status: string;
-  potencia: string; // Nova propriedade para a potência
+  potencia: string;
+  energy_source: string; // Adicionando a propriedade de Fonte de Energia
 };
 
 type RechargeScreenProps = NativeStackScreenProps<RootStackParamList, 'Recharge'>;
@@ -21,7 +31,7 @@ const RechargeScreen: React.FC<RechargeScreenProps> = ({ navigation }) => {
 
   const loadStations = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/charging-stations'); 
+      const response = await axios.get('http://localhost:3000/api/charging-stations');
       setStations(response.data as RechargeStation[]);
     } catch (error) {
       console.error('Erro ao carregar os pontos de recarga:', error);
@@ -48,7 +58,7 @@ const RechargeScreen: React.FC<RechargeScreenProps> = ({ navigation }) => {
     <View style={styles.stationItemContainer}>
       <View style={styles.stationItem}>
         <Text style={styles.stationText}>
-          {item.location} - Capacidade: {item.capacity} - Status: {item.status} - Potência: {item.potencia}
+          Local: {item.location} | Capacidade: {item.capacity} | Status: {item.status} | Potência: {item.potencia} | Fonte de Energia: {item.energy_source}
         </Text>
         <View style={styles.actions}>
           <TouchableOpacity
@@ -56,6 +66,7 @@ const RechargeScreen: React.FC<RechargeScreenProps> = ({ navigation }) => {
             onPress={() => navigation.navigate('EditStation', { station: item })}
             activeOpacity={0.7}
           >
+            <Image source={require('../../assets/img/botao-editar.png')} style={styles.icon} />
             <Text style={ButtonStyle.buttonText}>Editar</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -63,6 +74,7 @@ const RechargeScreen: React.FC<RechargeScreenProps> = ({ navigation }) => {
             onPress={() => deleteStation(item.id)}
             activeOpacity={0.7}
           >
+            <Image source={require('../../assets/img/lixeira.png')} style={styles.icon} />
             <Text style={ButtonStyle.buttonText}>Excluir</Text>
           </TouchableOpacity>
         </View>
@@ -78,7 +90,7 @@ const RechargeScreen: React.FC<RechargeScreenProps> = ({ navigation }) => {
     >
       <View style={styles.container}>
         <Text style={styles.title}>Pontos de Recarga</Text>
-        
+
         <FlatList
           data={stations}
           renderItem={renderStationItem}
@@ -113,7 +125,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   stationItemContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fundo branco translúcido
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     padding: 8,
     marginBottom: 8,
     borderRadius: 8,
@@ -128,6 +140,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 8,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    marginRight: 8,
   },
   buttons: {
     marginTop: 16,

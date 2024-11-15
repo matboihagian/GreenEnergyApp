@@ -108,10 +108,11 @@ const ChargingScreen: React.FC<ChargingScreenProps> = ({ route }) => {
           {item.status}
         </Text>
         <TouchableOpacity
-          style={ButtonStyle.button}
+          style={[ButtonStyle.button, { backgroundColor: '#32CD32' }]} // Tom de verde no botão
           onPress={() => calculateChargingTime(item.potencia, car?.battery_level || 0)}
           activeOpacity={0.7}
         >
+          <Image source={require('../../assets/img/fast-charge.png')} style={styles.icon} />
           <Text style={ButtonStyle.buttonText}>Carregar</Text>
         </TouchableOpacity>
       </View>
@@ -191,11 +192,12 @@ const styles = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
+    marginRight: 8,
   },
   chargingTimeContainer: {
     alignItems: 'center',
     marginBottom: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fundo branco translúcido
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     padding: 10,
     borderRadius: 8,
   },

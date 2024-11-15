@@ -23,7 +23,7 @@ export type RootStackParamList = {
     CreateCar: undefined;
     EditCar: { car: { id: number; make: string; model: string; year: number; ownerId: number; battery_level: number } };
     CreateStation: undefined;
-    EditStation: { station: { id: number; location: string; capacity: number; status: string; potencia: string } };
+    EditStation: { station: { id: number; location: string; capacity: number; status: string; potencia: string; energy_source: string } };
     ChargingScreen: { carId: number }; // Parâmetro para identificar o carro a ser carregado
 };
 

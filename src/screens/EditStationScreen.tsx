@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, Image, ImageBackground, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -15,20 +15,24 @@ const EditStationScreen: React.FC<EditStationScreenProps> = ({ route, navigation
   const [location, setLocation] = useState(station.location);
   const [capacity, setCapacity] = useState(station.capacity.toString());
   const [status, setStatus] = useState(station.status);
-  const [potencia, setPotencia] = useState(station.potencia); // Estado para a potência
+  const [potencia, setPotencia] = useState(station.potencia);
+  const [energySource, setEnergySource] = useState(station.energy_source); // Estado para Fonte de Energia
 
   const saveStation = async () => {
-    if (!location || !capacity || !status || !potencia) {
+    // Verificação para garantir que todos os campos estão preenchidos
+    if (!location || !capacity || !status || !potencia || !energySource) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos.');
       return;
     }
 
     try {
+      // Enviar dados de atualização para o backend
       await axios.put(`http://localhost:3000/api/charging-stations/${station.id}`, {
         location,
         capacity: parseInt(capacity, 10),
         status,
         potencia,
+        energy_source: energySource,
       });
 
       Alert.alert('Sucesso', 'Ponto de recarga atualizado com sucesso!');
@@ -100,6 +104,19 @@ const EditStationScreen: React.FC<EditStationScreenProps> = ({ route, navigation
           </Picker>
         </View>
 
+        <Text>Fonte de Energia</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={energySource}
+            onValueChange={(itemValue) => setEnergySource(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Energia Eólica" value="Energia Eólica" />
+            <Picker.Item label="Energia Solar" value="Energia Solar" />
+            <Picker.Item label="Energia Hidroelétrica" value="Energia Hidroelétrica" />
+          </Picker>
+        </View>
+
         <TouchableOpacity style={ButtonStyle.button} onPress={saveStation} activeOpacity={0.7}>
           <Text style={ButtonStyle.buttonText}>Salvar Alterações</Text>
         </TouchableOpacity>
@@ -109,6 +126,7 @@ const EditStationScreen: React.FC<EditStationScreenProps> = ({ route, navigation
           onPress={deleteStation}
           activeOpacity={0.7}
         >
+          <Image source={require('../../assets/img/lixeira.png')} style={styles.icon} />
           <Text style={ButtonStyle.buttonText}>Excluir Ponto de Recarga</Text>
         </TouchableOpacity>
       </View>
@@ -122,7 +140,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fundo translúcido para contraste
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     margin: 16,
     borderRadius: 8,
   },
@@ -138,7 +156,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Fundo translúcido nos campos de entrada
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
     borderRadius: 8,
   },
   pickerContainer: {
@@ -152,5 +170,10 @@ const styles = StyleSheet.create({
     height: 40,
     color: 'black',
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
+  },
+  icon: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
   },
 });

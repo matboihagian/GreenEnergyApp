@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, Image, ImageBackground, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -15,17 +15,14 @@ const EditCarScreen: React.FC<EditCarScreenProps> = ({ route, navigation }) => {
   const [model, setModel] = useState(car.model);
   const [year, setYear] = useState(car.year.toString());
   const [ownerId, setOwnerId] = useState(car.ownerId.toString());
-  const [batteryLevel, setBatteryLevel] = useState(car.battery_level.toString()); // Novo estado para o nível de bateria
+  const [batteryLevel, setBatteryLevel] = useState(car.battery_level.toString());
 
   const saveCar = async () => {
-    console.log("Função saveCar foi chamada"); // Log para depuração
-
     if (!make || !model || !year || !ownerId || batteryLevel === '') {
       Alert.alert('Erro', 'Por favor, preencha todos os campos.');
       return;
     }
 
-    // Validar nível de bateria entre 0 e 100
     const batteryLevelNumber = parseInt(batteryLevel, 10);
     if (isNaN(batteryLevelNumber) || batteryLevelNumber < 0 || batteryLevelNumber > 100) {
       Alert.alert('Erro', 'O nível de bateria deve ser um valor entre 0 e 100.');
@@ -38,7 +35,7 @@ const EditCarScreen: React.FC<EditCarScreenProps> = ({ route, navigation }) => {
         model,
         year: parseInt(year, 10),
         ownerId: parseInt(ownerId, 10),
-        battery_level: batteryLevelNumber, // Atualiza o nível de bateria
+        battery_level: batteryLevelNumber,
       });
 
       Alert.alert('Sucesso', 'Carro atualizado com sucesso!');
@@ -126,6 +123,7 @@ const EditCarScreen: React.FC<EditCarScreenProps> = ({ route, navigation }) => {
           onPress={deleteCar}
           activeOpacity={0.7}
         >
+          <Image source={require('../../assets/img/lixeira.png')} style={styles.icon} />
           <Text style={ButtonStyle.buttonText}>Excluir Carro</Text>
         </TouchableOpacity>
       </View>
@@ -157,5 +155,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     backgroundColor: 'rgba(255, 255, 255, 0.5)', // Fundo translúcido nos campos de entrada
     borderRadius: 8,
+  },
+  icon: {
+    width: 16,
+    height: 16,
+    marginRight: 8,
   },
 });

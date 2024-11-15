@@ -53,7 +53,7 @@ const CarScreen: React.FC<CarScreenProps> = ({ navigation }) => {
           {item.make} {item.model} - {item.year}
         </Text>
         <Text style={styles.batteryText}>
-          Bateria: {item.battery_level}% {/* Exibindo a porcentagem de bateria */}
+          Bateria: {item.battery_level}%
         </Text>
         <View style={styles.actions}>
           <TouchableOpacity
@@ -61,6 +61,7 @@ const CarScreen: React.FC<CarScreenProps> = ({ navigation }) => {
             onPress={() => navigation.navigate('EditCar', { car: item })}
             activeOpacity={0.7}
           >
+            <Image source={require('../../assets/img/botao-editar.png')} style={styles.icon} />
             <Text style={ButtonStyle.buttonText}>Editar</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -68,13 +69,15 @@ const CarScreen: React.FC<CarScreenProps> = ({ navigation }) => {
             onPress={() => deleteCar(item.id)}
             activeOpacity={0.7}
           >
+            <Image source={require('../../assets/img/lixeira.png')} style={styles.icon} />
             <Text style={ButtonStyle.buttonText}>Excluir</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[ButtonStyle.button, { backgroundColor: 'rgba(0, 150, 255, 0.7)' }]}
+            style={[ButtonStyle.button, { backgroundColor: '#5add75' }]} // Botão verde suave
             onPress={() => navigation.navigate('ChargingScreen', { carId: item.id })}
             activeOpacity={0.7}
           >
+            <Image source={require('../../assets/img/fast-charge.png')} style={styles.icon} />
             <Text style={ButtonStyle.buttonText}>Carregar</Text>
           </TouchableOpacity>
         </View>
@@ -158,6 +161,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 8,
+  },
+  icon: {
+    width: 16,
+    height: 16,
+    marginRight: 4,
   },
   buttons: {
     marginTop: 16,

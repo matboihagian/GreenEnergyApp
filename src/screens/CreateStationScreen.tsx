@@ -13,10 +13,11 @@ const CreateStationScreen: React.FC<CreateStationScreenProps> = ({ navigation })
   const [location, setLocation] = useState('');
   const [capacity, setCapacity] = useState('');
   const [status, setStatus] = useState('');
-  const [potencia, setPotencia] = useState('1,4kW'); // Estado para a potência, valor inicial '1,4kW'
+  const [potencia, setPotencia] = useState('1,4kW'); // Valor inicial para Potência
+  const [energySource, setEnergySource] = useState('Energia Eólica'); // Valor inicial para Fonte de Energia
 
   const createStation = async () => {
-    if (!location || !capacity || !status || !potencia) {
+    if (!location || !capacity || !status || !potencia || !energySource) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos.');
       return;
     }
@@ -27,6 +28,7 @@ const CreateStationScreen: React.FC<CreateStationScreenProps> = ({ navigation })
         capacity: parseInt(capacity, 10),
         status,
         potencia,
+        energy_source: energySource, // Nova informação enviada ao backend
       });
 
       Alert.alert('Sucesso', 'Ponto de recarga criado com sucesso!');
@@ -84,6 +86,19 @@ const CreateStationScreen: React.FC<CreateStationScreenProps> = ({ navigation })
             <Picker.Item label="1,4kW" value="1,4kW" />
             <Picker.Item label="22kW" value="22kW" />
             <Picker.Item label="50kW" value="50kW" />
+          </Picker>
+        </View>
+
+        <Text>Fonte de Energia</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={energySource}
+            onValueChange={(itemValue) => setEnergySource(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Energia Eólica" value="Energia Eólica" />
+            <Picker.Item label="Energia Solar" value="Energia Solar" />
+            <Picker.Item label="Energia Hidroelétrica" value="Energia Hidroelétrica" />
           </Picker>
         </View>
 
